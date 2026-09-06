@@ -133,6 +133,21 @@ app.put("/productos/:id", async (require, result) => {
   };
 });
 
+//eliminar
+app.delete("/productos/:id", async (require, result) => {
+  try{
+    const { id } = require.params;
+    await validarProducto(id);
+
+    const sql = 'DELETE FROM productos WHERE id = ?';
+
+    const [res] = await db.query(sql, [id]);
+    sendSuccess(result, { affectedRows : res.affectedRows});
+  }catch(error){
+    sendError(result, error);
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Servidor iniciado en http://localhost:${PORT}`)
 })
