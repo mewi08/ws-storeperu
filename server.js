@@ -72,6 +72,27 @@ function validarDatos(datos){
   };
 }
 
+//Crear
+app.post("/productos", async (require, result) => {
+  try{
+    validarDatos(require.body);
+    const { nombre, categoria, descripcion, 
+    garantia, precio, stock } = require.body;
+
+  const sql = `
+    INSERT INTO productos (nombre, categoria, descripcion, garantia, precio, stock)
+      VALUES (?,?,?,?,?,?) 
+    `;
+
+  const [res] = await db.query(sql, [nombre, categoria, descripcion, garantia, precio, stock]);
+
+  sendSuccess(result, { id: res.insertId } );
+
+  }catch(error){
+    sendError(result, error);
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Servidor iniciado en http://localhost:${PORT}`)
 })
