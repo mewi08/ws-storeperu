@@ -164,6 +164,24 @@ app.get("/productos", async (require, result) => {
   }
 });
 
+//buscar por id
+app.get("/productos/:id", async (require, result) => {
+  try{
+    const { id } = require.params;
+    await validarProducto(id);
+    
+    const sql = `
+    SELECT id, nombre, categoria, descripcion, garantia, precio, stock
+    FROM productos
+    WHERE id = ?`;
+
+    const [res] = await db.query(sql, [id]);
+    sendSuccess(result, res[0]);
+  }catch(error){
+    sendError(result, error);
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Servidor iniciado en http://localhost:${PORT}`)
 })
