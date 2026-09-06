@@ -34,6 +34,44 @@ db.getConnection((err) => {
   console.log("Conectado a la base de datos Store Perú");
 });
 
+//Función para validar los datos de entrada
+function validarDatos(datos){
+  const { nombre, categoria, descripcion, 
+    garantia, precio, stock } = datos;
+  
+  if(!nombre){ 
+    throw new Error('Ingrese el nombre del producto');
+  };
+  
+  if(!categoria) {
+    throw new Error('Ingrese la categoria del producto');
+  };
+
+  if(!descripcion){
+    throw new Error('Ingrese la descripción del producto');
+  };
+
+  if(garantia != null && garantia < 0){
+    throw new Error('La garantia no puede ser negativa');
+  };
+
+  if(!precio){
+    throw new Error('Ingrese el precio del producto');
+  }
+
+  if(!stock){
+    throw new Error('Ingrese el stock del producto');
+  }
+
+  if(precio < 0){
+    throw new Error('El precio no puede ser negativo');
+  };
+
+  if(stock < 0){
+    throw new Error('El stock no puede ser negativo');
+  };
+}
+
 app.listen(PORT, () => {
   console.log(`Servidor iniciado en http://localhost:${PORT}`)
 })
