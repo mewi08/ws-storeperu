@@ -104,6 +104,35 @@ app.post("/productos", async (require, result) => {
   }
 });
 
+//actualizar
+app.put("/productos/:id", async (require, result) => {
+  try{
+    validarDatos(require.body);
+    const { id } = require.params;
+    await validarProducto(id);
+    const { nombre, categoria, descripcion, 
+    garantia, precio, stock } = require.body;
+
+    const sql = `
+      UPDATE productos SET 
+        nombre = ?,
+        categoria = ?,
+        descripcion = ?,
+        garantia = ?,
+        precio = ?,
+        stock = ?,
+        update_at = NOW()
+      WHERE id = ?
+    `;
+
+    const [res] = await db.query(sql, [nombre, categoria, descripcion, garantia, precio, stock, id]);
+
+    sendSuccess(result, { affectedRows: res.affectedRows });
+  }catch(error){
+    sendError(result, error);
+  };
+});
+
 app.listen(PORT, () => {
   console.log(`Servidor iniciado en http://localhost:${PORT}`)
 })
