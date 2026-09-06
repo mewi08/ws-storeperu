@@ -148,6 +148,22 @@ app.delete("/productos/:id", async (require, result) => {
   }
 });
 
+//listar 
+app.get("/productos", async (require, result) => {
+  try{
+    const sql = `
+    SELECT id, nombre, categoria, descripcion, garantia, precio, stock
+      FROM productos
+      ORDER BY id DESC
+      LIMIT 5`;
+
+    const [res] = await db.query(sql);
+    sendSuccess(result, res);
+  }catch(error){
+    sendError(result, error);
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Servidor iniciado en http://localhost:${PORT}`)
 })
