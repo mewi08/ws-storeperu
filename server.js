@@ -72,6 +72,17 @@ function validarDatos(datos){
   };
 }
 
+//Función para validar si existe un producto por ID
+//Si encuentra un producto devolverá la constante 1
+async function validarProducto(id) {
+  const sql = 'SELECT 1 FROM productos WHERE id = ?';
+  const [res] = await db.query(sql, [id]);
+
+  if (res.length == 0) {
+    throw new Error('No encontrado');
+  }
+}
+
 //Crear
 app.post("/productos", async (require, result) => {
   try{
