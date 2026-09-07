@@ -184,6 +184,25 @@ app.get("/productos/:id", async (require, result) => {
   }
 });
 
+//buscar por categoria
+app.get("/productos/categoria/:categoria", async (require, result) => {
+  try{
+    const { categoria } = require.params;
+    const sql = `
+    SELECT id, nombre, categoria, descripcion, garantia, precio, stock
+    FROM productos
+    WHERE categoria = ?`;
+
+    const [res] = await db.query(sql, [categoria]);
+    if(res.length == 0){
+      throw new Error('No encontrado');
+    }
+    sendSuccess(result, res);
+  }catch(error){
+    sendError(result, error);
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Servidor iniciado en http://localhost:${PORT}`)
 })
