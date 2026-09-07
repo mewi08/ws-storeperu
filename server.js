@@ -38,13 +38,15 @@ db.getConnection((err) => {
 function validarDatos(datos){
   const { nombre, categoria, descripcion, 
     garantia, precio, stock } = datos;
-  
+
+  const listaCategoria = ['Juguetes', 'Tecnología', 'Ropa', 'Hogar'];
+
   if(!nombre){ 
     throw new Error('Ingrese el nombre del producto');
   };
   
-  if(!categoria) {
-    throw new Error('Ingrese la categoria del producto');
+  if(!listaCategoria.includes(categoria)) {
+    throw new Error('La categoría no es valida');
   };
 
   if(!descripcion){
