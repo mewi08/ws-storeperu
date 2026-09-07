@@ -4,7 +4,7 @@ USE store_peru;
 CREATE TABLE productos(
     id 		    INT AUTO_INCREMENT PRIMARY KEY,
     nombre      VARCHAR(30) NOT NULL,
-    categoria   VARCHAR(15) NOT NULL,
+    categoria 	ENUM ('Juguetes', 'Tecnología', 'Ropa', 'Hogar') NOT NULL,
     descripcion VARCHAR(50) NOT NULL,
     garantia    TINYINT NULL DEFAULT 0,
     precio      DECIMAL(6,2) NOT NULL,
