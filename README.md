@@ -6,7 +6,7 @@ Está aplicación, utiliza NodeJS como entorno de desarrollo para acceder y gest
 - MySQL
 
 ### Base de datos
-Restaure la BD, tabla y registros desde el archivo **database.sql**.
+Restaure la BD, tabla y registros desde el archivo **db.sql**.
 
 ### Despliegue
 1. Clone el repositorio: 
