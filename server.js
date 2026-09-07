@@ -55,16 +55,16 @@ function validarDatos(datos){
     throw new Error('La garantia no puede ser negativa');
   };
 
-  if(!precio){
+  if(precio == null){
     throw new Error('Ingrese el precio del producto');
   }
 
-  if(!stock){
+  if(stock == null){
     throw new Error('Ingrese el stock del producto');
   }
 
-  if(precio < 0){
-    throw new Error('El precio no puede ser negativo');
+  if(precio <= 0){
+    throw new Error('El precio debe ser mayor a 0');
   };
 
   if(stock < 0){
