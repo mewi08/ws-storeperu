@@ -170,14 +170,15 @@ app.get("/productos", async (require, result) => {
 app.get("/productos/:id", async (require, result) => {
   try{
     const { id } = require.params;
-    await validarProducto(id);
-    
     const sql = `
     SELECT id, nombre, categoria, descripcion, garantia, precio, stock
     FROM productos
     WHERE id = ?`;
 
     const [res] = await db.query(sql, [id]);
+    if (res.length === 0) {
+      throw new Error('No encontrado');
+    }
     sendSuccess(result, res[0]);
   }catch(error){
     sendError(result, error);
