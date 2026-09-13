@@ -15,6 +15,17 @@ const db = mysql.createPool({
   database: process.env.DB_NAME,
 });
 
+//para agregar códigos de estado HTTP
+class ErrorHttp extends Error {
+  //el constructor recibe el mensaje y el código de estado
+  constructor(mensaje, status) {
+    //envía el mensaje a la clase Error
+    super(mensaje);
+    //guarda el código de estado HTTP
+    this.status = status;
+  }
+}
+
 function sendSuccess(result, datos){
   result.status(200).send({
     success: true,
@@ -23,7 +34,7 @@ function sendSuccess(result, datos){
 };
 
 function sendError(result, error){
-  result.status(500).send({
+  result.status(error.status || 500).send({
     success: false,
     mensaje: error.message,
   });
@@ -42,35 +53,35 @@ function validarDatos(datos){
   const listaCategoria = ['Juguetes', 'Tecnología', 'Ropa', 'Hogar'];
 
   if(!nombre){ 
-    throw new Error('Ingrese el nombre del producto');
+    throw new ErrorHttp('Ingrese el nombre del producto', 400);
   };
   
   if(!listaCategoria.includes(categoria)) {
-    throw new Error('La categoría no es valida');
+    throw new ErrorHttp('La categoría no es valida', 400);
   };
 
   if(!descripcion){
-    throw new Error('Ingrese la descripción del producto');
+    throw new ErrorHttp('Ingrese la descripción del producto', 400);
   };
 
   if(garantia != null && garantia < 0){
-    throw new Error('La garantia no puede ser negativa');
+    throw new ErrorHttp('La garantia no puede ser negativa', 400);
   };
 
   if(precio == null){
-    throw new Error('Ingrese el precio del producto');
+    throw new ErrorHttp('Ingrese el precio del producto', 400);
   }
 
   if(stock == null){
-    throw new Error('Ingrese el stock del producto');
+    throw new ErrorHttp('Ingrese el stock del producto', 400);
   }
 
   if(precio <= 0){
-    throw new Error('El precio debe ser mayor a 0');
+    throw new ErrorHttp('El precio debe ser mayor a 0', 400);
   };
 
   if(stock < 0){
-    throw new Error('El stock no puede ser negativo');
+    throw new ErrorHttp('El stock no puede ser negativo', 400);
   };
 }
 
@@ -81,7 +92,7 @@ async function validarProducto(id) {
   const [res] = await db.query(sql, [id]);
 
   if (res.length == 0) {
-    throw new Error('No encontrado');
+    throw new ErrorHttp('No encontrado', 404);
   }
 }
 
@@ -186,7 +197,7 @@ app.get("/productos/:id", async (require, result) => {
 
     const [res] = await db.query(sql, [id]);
     if (res.length === 0) {
-      throw new Error('No encontrado');
+      throw new ErrorHttp('No encontrado', 404);
     }
     sendSuccess(result, res[0]);
   }catch(error){
@@ -205,7 +216,7 @@ app.get("/productos/categoria/:categoria", async (require, result) => {
 
     const [res] = await db.query(sql, [categoria]);
     if(res.length == 0){
-      throw new Error('No encontrado');
+      throw new ErrorHttp('No encontrado', 404);
     }
     sendSuccess(result, res);
   }catch(error){
