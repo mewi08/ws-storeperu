@@ -99,7 +99,10 @@ app.post("/productos", async (require, result) => {
 
   const [res] = await db.query(sql, [nombre, categoria, descripcion, garantia, precio, stock]);
 
-  sendSuccess(result, { id: res.insertId } );
+  sendSuccess(result, { 
+    id: res.insertId,
+    mensaje: "Producto registrado"
+  });
 
   }catch(error){
     sendError(result, error);
@@ -129,7 +132,10 @@ app.put("/productos/:id", async (require, result) => {
 
     const [res] = await db.query(sql, [nombre, categoria, descripcion, garantia, precio, stock, id]);
 
-    sendSuccess(result, { affectedRows: res.affectedRows });
+    sendSuccess(result, { 
+      affectedRows: res.affectedRows,
+      mensaje: "Producto actualizado"
+    });
   }catch(error){
     sendError(result, error);
   };
@@ -144,7 +150,10 @@ app.delete("/productos/:id", async (require, result) => {
     const sql = 'DELETE FROM productos WHERE id = ?';
 
     const [res] = await db.query(sql, [id]);
-    sendSuccess(result, { affectedRows : res.affectedRows});
+    sendSuccess(result, { 
+      affectedRows : res.affectedRows,
+      mensaje: "Producto eliminado"
+    });
   }catch(error){
     sendError(result, error);
   }
