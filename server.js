@@ -1,19 +1,9 @@
-require('dotenv').config();
 const express = require("express");
-const mysql = require('mysql2/promise');
 const bodyParser = require("body-parser");
-const PORT = 3000;
-
+const env = require('./env');
+const db = require('./database');
 const app = express();
 app.use(bodyParser.json());
-
-const db = mysql.createPool({
-  host: process.env.DB_HOST,
-  port: process.env.DB_PORT,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-});
 
 //para agregar códigos de estado HTTP
 class ErrorHttp extends Error {
@@ -224,6 +214,6 @@ app.get("/productos/categoria/:categoria", async (require, result) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`Servidor iniciado en http://localhost:${PORT}`)
+app.listen(env.port, () => {
+  console.log(`Servidor iniciado en http://localhost:${env.port}`)
 })
